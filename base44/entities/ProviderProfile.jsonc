@@ -1,0 +1,85 @@
+{
+  "name": "ProviderProfile",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Reference to User id"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string",
+      "format": "image_uri"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of service categories this provider offers"
+    },
+    "custom_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Custom job names when 'other' skill is selected"
+    },
+    "service_area": {
+      "type": "string",
+      "description": "City or area where provider operates"
+    },
+    "shop_address": {
+      "type": "string",
+      "description": "Address of the provider's shop or workshop"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "offers_home_service": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the provider offers at-home service"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "suspended"
+      ],
+      "default": "pending"
+    },
+    "avg_rating": {
+      "type": "number",
+      "default": 0
+    },
+    "total_ratings": {
+      "type": "number",
+      "default": 0
+    },
+    "total_jobs": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "user_id",
+    "full_name",
+    "phone",
+    "skills",
+    "service_area"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "name": "ServiceRequest",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "User id of the customer"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_phone": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "electrical",
+        "plumbing",
+        "appliance_repair",
+        "painting",
+        "carpentry",
+        "cleaning",
+        "ac_repair",
+        "water_tank",
+        "other"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "photo_urls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "image_uri"
+      }
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "address": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "accepted",
+        "in_progress",
+        "completed",
+        "cancelled",
+        "rejected"
+      ],
+      "default": "open"
+    },
+    "provider_id": {
+      "type": "string",
+      "description": "ProviderProfile id of the assigned provider (direct order)"
+    },
+    "provider_name": {
+      "type": "string"
+    },
+    "provider_phone": {
+      "type": "string"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cancellation_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer_id",
+    "customer_name",
+    "category",
+    "title",
+    "description"
+  ]
+}

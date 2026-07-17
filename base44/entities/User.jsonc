@@ -1,0 +1,21 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "user_type": {
+      "type": "string",
+      "enum": [
+        "customer",
+        "provider"
+      ],
+      "default": "customer"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "profile_completed": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

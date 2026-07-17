@@ -1,0 +1,40 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Recipient user id"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "order_new",
+        "order_accepted",
+        "order_rejected",
+        "order_completed",
+        "order_cancelled",
+        "info"
+      ],
+      "default": "info"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Related ServiceRequest id"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "user_id",
+    "title"
+  ]
+}

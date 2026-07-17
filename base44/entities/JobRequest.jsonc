@@ -1,0 +1,33 @@
+{
+  "name": "JobRequest",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "job_name": {
+      "type": "string",
+      "description": "Requested job/category name"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "user_id",
+    "user_name",
+    "job_name"
+  ]
+}
