@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-
+import {supabase} from "@/lib/supabaseClient";
 
 const createAxiosClient = () => {
   return {
@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   
   useEffect(() => {
     checkAppState();
+    checkUserAuth();
   }, []);
   
   const checkAppState = async () => {
@@ -100,11 +101,31 @@ export const AuthProvider = ({ children }) => {
     try {
       // Now check if the user is authenticated
       setIsLoadingAuth(true);
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      setIsAuthenticated(true);
+      const { data: { user}, error } = await supabase.auth.getUser();
+      if (error) {
+        throw error;
+      }
+      if (user) {
+        setUser(user);
+        setIsAuthenticated(true);
+      }else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
       setIsLoadingAuth(false);
       setAuthChecked(true);
+    } catch (error) {
+      console.error('User auth check failed:', error);
+      setUser(null);
+      setIsLoadingAuth(false);
+      setIsAuthenticated(false);
+      setAuthChecked(true);
+      if (error.status === 401 || error.status === 403) {
+        setAuthError({
+          type: 'auth_required',
+          message: 'Authentication required'
+        });
+      }
     } catch (error) {
       console.error('User auth check failed:', error);
       setIsLoadingAuth(false);
