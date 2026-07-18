@@ -154,7 +154,7 @@ export const AuthProvider = ({ children }) => {
   const navigateToLogin = () => {
     // Use the SDK's redirectToLogin method
     base44.auth.redirectToLogin(window.location.href);
-  };
+  
   
   return (
     <AuthContext.Provider value={{ 
@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-
+  };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
