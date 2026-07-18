@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     checkUserAuth();
   }, []);
   
-  const checkAppState = async () => {
+  const checkAppState = async (appParams) => {
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
@@ -101,9 +101,9 @@ export const AuthProvider = ({ children }) => {
     try {
       // Now check if the user is authenticated
       setIsLoadingAuth(true);
-      const { data: { user}, error } = await supabase.auth.getUser();
-      if (error) {
-        throw error;
+      const { data: { user}, error: authError } = await supabase.auth.getUser();
+      if (authError) {
+        throw authError;
       }
       if (user) {
         setUser(user);
@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-  };
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
