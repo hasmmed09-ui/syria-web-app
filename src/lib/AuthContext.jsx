@@ -150,11 +150,30 @@ export const AuthProvider = ({ children }) => {
       console.error('Logout failed:', error.message);
   }
  };
+
+  const getRedirectUrl = () => {
+    return window.location.origin;
+  }
   
   const navigateToLogin = () => {
     // Use the SDK's redirectToLogin method
-    supabase.auth.signInWithOtp({ redirectTo: window.location.href });
+    supabase.auth.signInWithOtp({ redirectTo: getRedirectUrl() });
   };
+
+  const logout = async (shouldRedirect = true) => {
+    setUser(null);
+    setIsAuthenticated(false);
+    try {
+      if (shouldRedirect) {
+        await supabase.auth.signOut({ redirectTo: getRedirectUrl() });
+      } else {
+        await supabase.auth.signOut();
+      }
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
+  };
+
   if (isLoadingPublicSettings) {
     return (
       <div style={{ display: 'flex', justifyContent:'center', alignItems:'center', height: '100vh' }}>
