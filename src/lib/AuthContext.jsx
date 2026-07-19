@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import {supabase} from "@/lib/supabaseClient";
 
-const createAxiosClient = () => {
+const createAxiosClient = (config = {}) => {
   return {
     get: async () => ({ data: [] }),
     post: async () => ({ data: {} }),
@@ -21,9 +21,11 @@ export const AuthProvider = ({ children }) => {
   const [authChecked, setAuthChecked] = useState(false);
   const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
   
+  // If you need to trigger checkAppState on mount, call it here with appropriate params.
   useEffect(() => {
-    checkAppState();
-    checkUserAuth();
+    // No-op by default. Replace `appParams` with real params when available.
+    const appParams = {};
+    checkAppState(appParams);
   }, []);
   
   const checkAppState = async (appParams) => {
@@ -32,7 +34,7 @@ export const AuthProvider = ({ children }) => {
         console.log("App params are not loaded yet...");
         return;
       }
-      
+
       setIsLoadingPublicSettings(true);
       setAuthError(null);
       
@@ -43,13 +45,13 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'X-App-Id': appParams.appId
         },
-        token: appParams.token, // Include token if available
+        token: appParams.token,
         interceptResponses: true
       });
       
       try {
         const publicSettings = await appClient.get(`/prod/public-settings/by-id/${appParams.appId}`);
-        setAppPublicSettings(publicSettings);
+        setAppPublicSettings(publicSettings?.data ?? publicSettings);
         
         // If we got the app public settings successfully, check if user is authenticated
         if (appParams.token) {
@@ -131,31 +133,36 @@ export const AuthProvider = ({ children }) => {
           message: 'Authentication required'
         });
       }
-    };
-      
-      // If user auth fails, it might be an expired token
-    
     }
   };
   
-  const logout = (shouldRedirect = true) => {
+  const logout = async (shouldRedirect = true) => {
     setUser(null);
     setIsAuthenticated(false);
     
-    if (shouldRedirect) {
-      // Use the SDK's logout method which handles token cleanup and redirect
-      base44.auth.logout(window.location.href);
+    try {
+      if (shouldRedirect) {
+      await supabase.auth.signOut({ redirectTo: window.location.href });
     } else {
-      // Just remove the token without redirect
-      base44.auth.logout();
+      await supabase.auth.signOut();
     }
-  };
+  } catch (error) {
+      console.error('Logout failed:', error.message);
+  }
+ };
   
   const navigateToLogin = () => {
     // Use the SDK's redirectToLogin method
-    base44.auth.redirectToLogin(window.location.href);
-  
-  
+    supabase.auth.signInWithOtp({ redirectTo: window.location.href });
+  };
+  if (isLoadingPublicSettings) {
+    return (
+      <div style={{ display: 'flex', justifyContent:'center', alignItems:'center', height: '100vh' }}>
+        <h2>Loading marketplace directory...</h2>
+      </div>
+    );
+  }
+
   return (
     <AuthContext.Provider value={{ 
       user, 
