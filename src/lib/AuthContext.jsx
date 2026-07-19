@@ -144,8 +144,9 @@ export const AuthProvider = ({ children }) => {
   
   const navigateToLogin = () => {
     // Use the SDK's redirectToLogin method
-    supabase.auth.signInWithOtp({ redirectTo: getRedirectUrl() });
+    supabase.auth.signUp({ redirectTo: getRedirectUrl() });
   };
+
 
   const logout = async (shouldRedirect = true) => {
     setUser(null);
