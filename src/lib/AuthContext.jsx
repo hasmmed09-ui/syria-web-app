@@ -28,6 +28,11 @@ export const AuthProvider = ({ children }) => {
   
   const checkAppState = async (appParams) => {
     try {
+      if (!appParams) {
+        console.log("App params are not loaded yet...");
+        return;
+      }
+      
       setIsLoadingPublicSettings(true);
       setAuthError(null);
       
@@ -129,12 +134,7 @@ export const AuthProvider = ({ children }) => {
     };
       
       // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
-        setAuthError({
-          type: 'auth_required',
-          message: 'Authentication required'
-        });
-      }
+    
     }
   };
   
